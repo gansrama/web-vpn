@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+    # Laravel Application
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: webform-vpn-app
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+            - ./storage/app/public:/var/www/html/storage/app/public
+        networks:
+            - webform-vpn-network
+        depends_on:
+            - mysql
+            - redis
+        ports:
+            - "8000:80"
+        environment:
+            - APP_NAME=Webform VPN
+            - APP_ENV=local
+            - APP_KEY=base64:QsfY21rA4YXWLy/JNEuMI0iq7Y/uJFIPgFIwLBWSOEk=
+            - APP_DEBUG=true
+            - APP_URL=http://localhost:8000
+            - APP_TIMEZONE=UTC
+            - DB_CONNECTION=mysql
+            - DB_HOST=mysql
+            - DB_PORT=3306
+            - DB_DATABASE=webform_vpn
+            - DB_USERNAME=webform_vpn
+            - DB_PASSWORD=webform_vpn_password
+            - CACHE_DRIVER=redis
+            - CACHE_HOST=redis
+            - CACHE_PORT=6379
+            - SESSION_DRIVER=database
+            - QUEUE_CONNECTION=database
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+
+    # MySQL Database
+    mysql:
+        image: mysql:8.0
+        container_name: webform-vpn-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: webform_vpn
+            MYSQL_USER: webform_vpn
+            MYSQL_PASSWORD: webform_vpn_password
+            MYSQL_ROOT_PASSWORD: root_password
+            MYSQL_ROOT_HOST: '%'
+        volumes:
+            - mysql_data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - webform-vpn-network
+        command: --default-authentication-plugin=mysql_native_password
+
+    # Redis Cache
+    redis:
+        image: redis:7-alpine
+        container_name: webform-vpn-redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+        networks:
+            - webform-vpn-network
+
+    # Nginx Web Server
+    nginx:
+        image: nginx:alpine
+        container_name: webform-vpn-nginx
+        restart: unless-stopped
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./docker/nginx/sites/:/etc/nginx/sites-available/
+            - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+        depends_on:
+            - app
+        networks:
+            - webform-vpn-network
+
+    # Node.js for Vite Development
+    node:
+        build:
+            context: .
+            dockerfile: Dockerfile.node
+        container_name: webform-vpn-node
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html
+            - /var/www/html/node_modules
+        ports:
+            - "5173:5173"
+        networks:
+            - webform-vpn-network
+        environment:
+            - NODE_ENV=development
+        command: npm run dev
+
+    # PHPMyAdmin (Optional - for database management)
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:latest
+        container_name: webform-vpn-phpmyadmin
+        restart: unless-stopped
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: root_password
+            MYSQL_ROOT_PASSWORD: root_password
+        depends_on:
+            - mysql
+        networks:
+            - webform-vpn-network
+
+    # MailHog (Optional - for email testing)
+    mailhog:
+        image: mailhog/mailhog:latest
+        container_name: webform-vpn-mailhog
+        restart: unless-stopped
+        ports:
+            - "1025:1025"  # SMTP
+            - "8025:8025"  # Web Interface
+        networks:
+            - webform-vpn-network
+
+networks:
+    webform-vpn-network:
+        driver: bridge
+
+volumes:
+    mysql_data:
+        driver: local
+    redis_data:
+        driver: local

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        iframe { width: 100%; height: 300px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Database & API Testing</h1>
+    
+    <div class="test-section">
+        <h2>1. Database Check</h2>
+        <p>Buka file ini di browser untuk melihat hasil: <a href="simple-db-check.php" target="_blank">simple-db-check.php</a></p>
+        <iframe src="simple-db-check.php" onload="this.style.height=this.contentDocument.body.scrollHeight+'px'"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Submit Test</h2>
+        <p>Buka file ini di browser untuk melihat hasil: <a href="test-submit.php" target="_blank">test-submit.php</a></p>
+        <iframe src="test-submit.php" onload="this.style.height=this.contentDocument.body.scrollHeight+'px'"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. API Test</h2>
+        <p>Buka API endpoint di browser: <a href="/api/akses-logic-requests" target="_blank">/api/akses-logic-requests</a></p>
+        <iframe src="/api/akses-logic-requests" onload="this.style.height=this.contentDocument.body.scrollHeight+'px'"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Debug Log Viewer</h2>
+        <p>Buka log viewer: <a href="debug-viewer.php" target="_blank">debug-viewer.php</a></p>
+        <iframe src="debug-viewer.php" onload="this.style.height=this.contentDocument.body.scrollHeight+'px'"></iframe>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Form Test</h2>
+        <p>Buka form untuk testing: <a href="/form-akses-logic" target="_blank">/form-akses-logic</a></p>
+        <button onclick="window.open('/form-akses-logic', '_blank')">Buka Form</button>
+    </div>
+    
+    <script>
+        // Auto refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
