@@ -1,5 +1,5 @@
-# Use the official PHP 8.2 FPM image
-FROM php:8.2-fpm
+# Use the official PHP 8.2 image
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,27 +14,22 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    nginx \
-    supervisor \
-    cron
+    libpq-dev
 
 # Clear package cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 # Copy existing application directory contents
-COPY . /var/www/html
-
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www/html
+COPY . /var/www
 
 # Install application dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts --prefer-dist
@@ -50,12 +45,11 @@ RUN npm install
 RUN npm run build
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+RUN chmod -R 755 /var/www/storage \
+    && chmod -R 755 /var/www/bootstrap/cache
 
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
+# Expose port for Render
+EXPOSE 80
 
-# Start php-fpm
-CMD ["php-fpm"]
+# Start Laravel server
+CMD php artisan serve --host=0.0.0.0 --port=$PORT
