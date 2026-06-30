@@ -123,10 +123,6 @@ Route::get('/api/debug-form-status', function (Request $request) {
     }
 });
 
-Route::get('{any?}', function() {
-    return view('application');
-})->where('any', '.*');
-
 // Authentication routes with session support
 Route::post('/api/login', function (Request $request) {
     try {
@@ -273,3 +269,17 @@ Route::get('/test-api-post', function () {
         'vpnServers' => $vpnServers
     ]);
 });
+
+// Catch-all SPA route — must be last so it does not shadow any named routes above
+Route::get('{any?}', function () {
+    try {
+        return view('application');
+    } catch (\Exception $e) {
+        report($e);
+        return response(
+            '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Error</title></head>'
+            . '<body><h1>Application Error</h1><p>The application failed to load. Please try again later.</p></body></html>',
+            500
+        )->header('Content-Type', 'text/html');
+    }
+})->where('any', '.*');
