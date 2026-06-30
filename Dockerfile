@@ -40,9 +40,6 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 # Generate application key
 RUN php artisan key:generate
 
-# Run database migrations
-RUN php artisan migrate --force
-
 # Create storage link
 RUN php artisan storage:link
 
@@ -60,8 +57,12 @@ RUN npm run build
 RUN chmod -R 755 /var/www/storage \
     && chmod -R 755 /var/www/bootstrap/cache
 
+# Copy entrypoint script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Expose port (Railway will set PORT env var automatically)
 EXPOSE 80
 
-# Start Laravel server
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-80}"]
+# Start Laravel server via entrypoint
+ENTRYPOINT ["docker-entrypoint.sh"]
