@@ -100,14 +100,10 @@ else
 fi
 
 # -------------------------------------------------------
-# Run database migrations
+# Run database migrations (non-fatal)
 # -------------------------------------------------------
 log "Running database migrations..."
-if php artisan migrate --force --no-interaction; then
-    log "Migrations completed successfully"
-else
-    log "WARNING: Migrations failed — the application may not work correctly"
-fi
+php artisan migrate --force --no-interaction || log "WARNING: Migrations failed — continuing without database"
 
 # -------------------------------------------------------
 # Ensure storage symlink exists
