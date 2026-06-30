@@ -16,7 +16,7 @@
     <div id="loading-bg">
       <div class="loading-logo">
         <!-- Jaya Raya Logo -->
-        <img src="<?php echo e(asset('images/jaya-raya-logo.png')); ?>" alt="Jaya Raya Logo" width="86" height="48">
+        <img src="<?php echo e(asset('images/jaya-raya-logo.png')); ?>" alt="Jaya Raya Logo" width="120" height="120" style="object-fit: contain;">
       </div>
       <div class="loading">
         <div class="effect-1 effects"></div>

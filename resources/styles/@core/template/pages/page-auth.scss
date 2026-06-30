@@ -19,6 +19,7 @@
   .auth-footer-start-tree, .auth-footer-end-tree{
     position: absolute !important;
     z-index: 1 !important;
+    filter: hue-rotate(-60deg) saturate(1.3);
   }
 
   .auth-footer-start-tree{
