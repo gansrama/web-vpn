@@ -34,12 +34,6 @@ COPY . /var/www
 # Install application dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts --prefer-dist
 
-# Copy .env.example to .env if .env doesn't exist
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
-# Generate application key
-RUN php artisan key:generate
-
 # Create storage link
 RUN php artisan storage:link
 
