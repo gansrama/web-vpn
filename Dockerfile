@@ -52,4 +52,4 @@ RUN chmod -R 755 /var/www/storage \
 EXPOSE 80
 
 # Start Laravel server
-CMD sh -c "php artisan serve --host=0.0.0.0 --port=${PORT:-80}"
+CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-80}"]
