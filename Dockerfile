@@ -34,6 +34,18 @@ COPY . /var/www
 # Install application dependencies
 RUN composer install --no-interaction --no-plugins --no-scripts --prefer-dist
 
+# Copy .env.example to .env if .env doesn't exist
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
+
+# Generate application key
+RUN php artisan key:generate
+
+# Run database migrations
+RUN php artisan migrate --force
+
+# Create storage link
+RUN php artisan storage:link
+
 # Install Node.js and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
