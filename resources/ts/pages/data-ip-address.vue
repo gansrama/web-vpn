@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useTheme } from 'vuetify'
 import type { VpnServer } from '@/types'
 
@@ -56,7 +56,8 @@ const getStatusText = (isActive: boolean) => {
 const fetchVpnServers = async () => {
   try {
     loading.value = true
-    const response = await fetch('/api/vpn-servers')
+    // Use pagination for faster initial load
+    const response = await fetch(`/api/vpn-servers?page=${currentPage.value}&per_page=${itemsPerPage.value}`)
     const data = await response.json()
     
     if (data.success) {
@@ -548,6 +549,17 @@ const confirmDelete = async () => {
     formLoading.value = false
   }
 }
+
+// Watch for page changes to refetch data
+watch(currentPage, () => {
+  fetchVpnServers()
+})
+
+// Watch for items per page changes
+watch(itemsPerPage, () => {
+  currentPage.value = 1
+  fetchVpnServers()
+})
 
 // Lifecycle
 onMounted(() => {

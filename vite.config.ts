@@ -24,6 +24,7 @@ export default defineConfig({
     watch: {
       usePolling: false,
       interval: 100,
+      ignored: ['**/*']
     },
     headers: {
       'Access-Control-Allow-Origin': '*',

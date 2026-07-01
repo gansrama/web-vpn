@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useTheme } from 'vuetify'
 import type { Employee } from '@/types'
 
@@ -76,7 +76,8 @@ const totalPages = computed(() => {
 const fetchEmployees = async () => {
   try {
     loading.value = true
-    const response = await fetch('/api/employees?per_page=1000')
+    // Load smaller initial dataset for faster performance
+    const response = await fetch('/api/employees?per_page=50')
     const data = await response.json()
     
     if (data.success) {
@@ -199,6 +200,17 @@ const addEmployee = async () => {
     isSubmitting.value = false
   }
 }
+
+// Watch for page changes to refetch data
+watch(currentPage, () => {
+  fetchEmployees()
+})
+
+// Watch for items per page changes
+watch(itemsPerPage, () => {
+  currentPage.value = 1
+  fetchEmployees()
+})
 
 // Lifecycle
 onMounted(() => {
