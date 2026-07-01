@@ -77,7 +77,9 @@ php artisan serve
 
 Aplikasi akan accessible di `http://localhost:8000`
 
-## � Instalasi dengan Docker (Recommended)
+## � Instalasi dengan Docker (Recommended untuk Production)
+
+**Docker adalah metode deployment yang direkomendasikan untuk production environment.**
 
 Project ini menyediakan setup Docker yang lengkap dengan:
 - Laravel Application (PHP 8.2)
@@ -197,7 +199,66 @@ docker-compose build --no-cache
 docker-compose build app
 ```
 
-## �🚀 Deployment ke cPanel
+## 🔄 Docker vs cPanel: Perbandingan Deployment
+
+### Docker (Recommended untuk Production)
+
+**Kelebihan:**
+- **Consistency**: Environment sama antara development, staging, dan production
+- **Isolation**: Tidak ada dependency conflict dengan aplikasi lain di server
+- **Scalability**: Mudah scaling dengan orchestration (Kubernetes, Docker Swarm)
+- **Rollback**: Mudah rollback ke versi sebelumnya dengan image versioning
+- **CI/CD Friendly**: Integrasi mudah dengan pipeline deployment
+- **Resource Efficiency**: Lebih efisien resource usage dibanding VM
+- **Security**: Container isolation menambah security layer
+- **Portability**: Bisa deploy ke cloud provider manapun (AWS, GCP, Azure, Railway, dll)
+
+**Kekurangan:**
+- Learning curve untuk team yang belum familiar
+- Membutuhkan server dengan Docker capability
+- Monitoring dan logging perlu setup tambahan
+
+### cPanel (Alternative untuk Shared Hosting)
+
+**Kelebihan:**
+- **User Friendly**: GUI interface untuk non-technical users
+- **Shared Hosting**: Murah untuk small projects
+- **Built-in Tools**: Email management, FTP, file manager, backup
+- **Familiar**: Banyak developer yang familiar dengan cPanel
+
+**Kekurangan:**
+- **Environment Inconsistency**: Sering beda antara local dan production
+- **Dependency Conflicts**: Bisa conflict dengan aplikasi lain di shared hosting
+- **Limited Scalability**: Sulit scaling horizontal
+- **Manual Process**: Deployment lebih manual dan error-prone
+- **Security Risks**: Shared environment = shared security risks
+
+### Rekomendasi untuk Web VPN
+
+**Gunakan Docker jika:**
+- Server dedicated atau VPS dengan full control
+- Team familiar dengan Docker
+- Butuh scalability dan reliability
+- Ada budget untuk server yang lebih capable
+- Ingin modern deployment practices
+
+**Gunakan cPanel jika:**
+- Budget terbatas (shared hosting)
+- Team belum familiar dengan Docker
+- Aplikasi kecil dengan traffic rendah
+- Butuh GUI untuk management
+- Hosting provider hanya menyediakan cPanel
+
+Untuk Jakarta Smart City, **Docker sangat direkomendasikan** karena:
+- Aplikasi ini sudah memiliki Docker setup yang lengkap
+- Lebih reliable untuk production environment
+- Mudah scaling jika traffic meningkat
+- Lebih secure dengan container isolation
+- Support modern DevOps practices
+
+## 🚀 Deployment ke cPanel (Alternative)
+
+**Catatan: cPanel deployment adalah alternative untuk shared hosting. Untuk production, gunakan Docker.**
 
 ### Persiapan Local
 ```bash
