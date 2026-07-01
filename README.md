@@ -6,7 +6,7 @@ Aplikasi Web VPN berbasis Laravel + Vue 3 + TypeScript untuk manajemen form dan 
 
 - **Backend**: Laravel (PHP 8.2+)
 - **Frontend**: Vue 3 + TypeScript + Vite
-- **Database**: MySQL
+- **Database**: PostgreSQL
 - **Styling**: TailwindCSS
 - **Icons**: Iconify
 
@@ -15,8 +15,8 @@ Aplikasi Web VPN berbasis Laravel + Vue 3 + TypeScript untuk manajemen form dan 
 - PHP 8.2 atau lebih tinggi
 - Composer
 - Node.js 18+ dan npm
-- MySQL 5.7+ atau MariaDB
-- Ekstensi PHP: `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `fileinfo`, `bcmath`, `gd` atau `imagick`
+- PostgreSQL 12+ atau MySQL 5.7+
+- Ekstensi PHP: `pdo_pgsql`, `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `fileinfo`, `bcmath`, `gd` atau `imagick`
 
 ## 📦 Instalasi Lokal
 
@@ -48,7 +48,7 @@ php artisan key:generate
 
 ### 4. Database Setup
 ```bash
-# Buat database MySQL baru
+# Buat database PostgreSQL baru
 # Lalu jalankan migrations
 php artisan migrate
 
@@ -83,11 +83,11 @@ Aplikasi akan accessible di `http://localhost:8000`
 
 Project ini menyediakan setup Docker yang lengkap dengan:
 - Laravel Application (PHP 8.2)
-- MySQL Database
+- PostgreSQL Database
 - Redis Cache
 - Nginx Web Server
 - Node.js untuk Vite Development
-- PHPMyAdmin (opsional)
+- pgAdmin (opsional)
 - MailHog untuk email testing (opsional)
 
 ### Prerequisites
@@ -102,7 +102,7 @@ Project ini menyediakan setup Docker yang lengkap dengan:
 docker-compose -f docker-compose.simple.yml up -d
 
 # Akses aplikasi di http://localhost:8000
-# Akses PHPMyAdmin di http://localhost:8081
+# Akses pgAdmin di http://localhost:8081
 ```
 
 #### Opsi 2: Docker Compose Full (Complete Setup)
@@ -111,7 +111,7 @@ docker-compose -f docker-compose.simple.yml up -d
 docker-compose up -d
 
 # Akses aplikasi di http://localhost:8000
-# Akses PHPMyAdmin di http://localhost:8080
+# Akses pgAdmin di http://localhost:8080
 # Akses MailHog di http://localhost:8025
 ```
 
@@ -171,17 +171,17 @@ docker-compose ps
 
 # View logs
 docker-compose logs app
-docker-compose logs mysql
+docker-compose logs postgres
 docker-compose logs nginx
 ```
 
 #### Database connection error
 ```bash
-# Pastikan MySQL container running
-docker-compose ps mysql
+# Pastikan PostgreSQL container running
+docker-compose ps postgres
 
-# Restart MySQL
-docker-compose restart mysql
+# Restart PostgreSQL
+docker-compose restart postgres
 ```
 
 #### Permission issues
