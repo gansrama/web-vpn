@@ -77,7 +77,127 @@ php artisan serve
 
 Aplikasi akan accessible di `http://localhost:8000`
 
-## 🚀 Deployment ke cPanel
+## � Instalasi dengan Docker (Recommended)
+
+Project ini menyediakan setup Docker yang lengkap dengan:
+- Laravel Application (PHP 8.2)
+- MySQL Database
+- Redis Cache
+- Nginx Web Server
+- Node.js untuk Vite Development
+- PHPMyAdmin (opsional)
+- MailHog untuk email testing (opsional)
+
+### Prerequisites
+- Docker Desktop terinstall
+- Docker Compose terinstall
+
+### Quick Start dengan Docker Compose
+
+#### Opsi 1: Docker Compose Simple (Recommended untuk Development)
+```bash
+# Build dan jalankan semua services
+docker-compose -f docker-compose.simple.yml up -d
+
+# Akses aplikasi di http://localhost:8000
+# Akses PHPMyAdmin di http://localhost:8081
+```
+
+#### Opsi 2: Docker Compose Full (Complete Setup)
+```bash
+# Build dan jalankan semua services
+docker-compose up -d
+
+# Akses aplikasi di http://localhost:8000
+# Akses PHPMyAdmin di http://localhost:8080
+# Akses MailHog di http://localhost:8025
+```
+
+### Docker Commands
+
+```bash
+# Jalankan containers
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+
+# Stop dan hapus volumes
+docker-compose down -v
+
+# View logs
+docker-compose logs -f app
+
+# Masuk ke container app
+docker-compose exec app bash
+
+# Run migrations di dalam container
+docker-compose exec app php artisan migrate
+
+# Install dependencies di dalam container
+docker-compose exec app composer install
+
+# Build assets di dalam container
+docker-compose exec node npm run build
+```
+
+### Konfigurasi Environment di Docker
+
+Environment variables sudah di-set di `docker-compose.yml` dan `docker-compose.simple.yml`. Jika perlu mengubah:
+
+1. Edit file `docker-compose.yml` atau `docker-compose.simple.yml`
+2. Update environment variables di section `app` service
+3. Restart containers: `docker-compose down && docker-compose up -d`
+
+### Docker Structure
+
+```
+docker/
+├── nginx/
+│   ├── nginx.conf
+│   ├── sites/
+│   └── conf.d/
+└── entrypoint.sh
+```
+
+### Troubleshooting Docker
+
+#### Container tidak start
+```bash
+# Check container status
+docker-compose ps
+
+# View logs
+docker-compose logs app
+docker-compose logs mysql
+docker-compose logs nginx
+```
+
+#### Database connection error
+```bash
+# Pastikan MySQL container running
+docker-compose ps mysql
+
+# Restart MySQL
+docker-compose restart mysql
+```
+
+#### Permission issues
+```bash
+# Fix permissions di dalam container
+docker-compose exec app chmod -R 755 storage bootstrap/cache
+```
+
+#### Rebuild containers
+```bash
+# Rebuild tanpa cache
+docker-compose build --no-cache
+
+# Rebuild specific service
+docker-compose build app
+```
+
+## �🚀 Deployment ke cPanel
 
 ### Persiapan Local
 ```bash
